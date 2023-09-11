@@ -45,7 +45,7 @@
         </div>
         <!-- END Select network -->
 
-        <!-- Recipient -->
+        <!-- Revenue Distributor Address Input -->
         <div class="mt-4">
           <input 
             v-model="distributorAddress"
@@ -53,7 +53,7 @@
             placeholder="Revenue Distributor address"
           >
         </div>
-        <!-- END Recipient -->
+        <!-- END Revenue Distributor Address Input -->
 
         <!-- Load button -->
         <button
@@ -65,7 +65,7 @@
           <span v-if="waitingData" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Load Data
         </button>
-        <!-- END load button -->
+        <!-- END Load button -->
 
         <!-- Connect wallet button -->
         <button
@@ -86,9 +86,8 @@
 <script>
 import WaitingToast from "../components/WaitingToast.vue";
 import useChainHelpers from "../composables/useChainHelpers";
-import useDomainHelpers from "../composables/useDomainHelpers";
 import { ethers } from 'ethers';
-import { useBoard, useEthers } from 'vue-dapp';
+import { useEthers } from 'vue-dapp';
 import { useToast, TYPE } from "vue-toastification";
 
 export default {
@@ -132,15 +131,13 @@ export default {
   },
 
   setup() {
-    const { open } = useBoard();
     const { address, balance, chainId, isActivated, signer } = useEthers();
     const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchNetwork } = useChainHelpers();
-    const { getDomainHolder } = useDomainHelpers();
     const toast = useToast();
 
     return { 
-      address, balance, chainId, getBlockExplorerBaseUrl, getChainName, getDomainHolder, getSupportedChains, 
-      isActivated, open, signer, switchNetwork, toast 
+      address, balance, chainId, getBlockExplorerBaseUrl, getChainName, getSupportedChains, 
+      isActivated, signer, switchNetwork, toast 
     }
   }
 
