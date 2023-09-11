@@ -1,7 +1,7 @@
 {
-	"short_name": "send2name-frontend",
-	"name": "Send2.name",
-	"description": "Send tokens to any web3 domain.",
+	"short_name": "revenue-distributor-frontend",
+	"name": "Revenue Distributor",
+	"description": "Manage Revenue Distributor smart contracts",
 	"icons": [
 		{
 			"src": "favicon-32x32.png",
