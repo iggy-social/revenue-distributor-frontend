@@ -19,4 +19,4 @@ Once your distributor smart contract is created, enter its address in the input 
 
 ## Distributor contracts for Iggy Social projects
 
-- SGB Chat (Songbird): `0x299d867E0ebEA37026510e4eeECCf631B38676aB`
+- SGB Chat (Songbird): `0x97203DE4aB5f1064618C727D80f16840DB8F4d59`
