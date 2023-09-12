@@ -23,7 +23,7 @@
           data-bs-toggle="dropdown" 
           aria-expanded="false"
         >
-          {{ getChainName(chainId) }}
+          CHAIN: {{ getChainName(chainId) }}
         </button>
         
         <div class="dropdown-menu p-2 dropdown-menu-end">
@@ -92,7 +92,14 @@
   </div>
 
   <!-- Recipients list -->
-  <RecipientsList v-if="recipients.length > 0" :recipients="recipients" />
+  <RecipientsList 
+    v-if="recipients.length > 0 && distributorAddress" 
+    :key="recipients.length" 
+    :recipients="recipients" 
+    :isCurrentUserManager="isCurrentUserManager" 
+    :distributorAddress="distributorAddress" 
+    @removeFromRecipients="removeFromRecipients"
+  />
 
   <!-- Info -->
   <Info v-if="recipients.length > 0" />
@@ -171,14 +178,25 @@ export default {
       // contract instance
       const distributorContract = new ethers.Contract(this.distributorAddress, distributorInterface, this.signer);
 
-      // get recipients
-      this.recipients = await distributorContract.getRecipients();
-
-      console.log(this.recipients);
-
       // get recipients length
       const recipientsLength = await distributorContract.getRecipientsLength();
-      console.log("Length", Number(recipientsLength));
+
+      // get recipients
+      const recipientsObject = await distributorContract.getRecipients();
+
+      // parse recipients
+      for (let i = 0; i < Number(recipientsLength); i++) {
+        const recipient = recipientsObject[i];
+        const recipientAddress = recipient[0];
+        const recipientLabel = recipient[1];
+        const recipientPercentage = recipient[2];
+
+        this.recipients.push({
+          address: recipientAddress,
+          label: recipientLabel,
+          percentage: recipientPercentage
+        });
+      }
 
       // check if current user is owner
       const owner = await distributorContract.owner();
@@ -193,7 +211,11 @@ export default {
       }
 
       this.waitingData = false;
-    }
+    },
+
+    removeFromRecipients(index) {
+      this.recipients.splice(index, 1);
+    },
 
   },
 
