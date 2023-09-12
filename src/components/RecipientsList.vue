@@ -23,7 +23,7 @@
             </tr>
             <tr v-for="(recipient, index) in recipients" :key="recipient.address">
               <td>
-                <a :href="getBlockExplorerBaseUrl(chainId)+'/address/'+recipient.address" target="_blank" class="text-white text-decoration-none">
+                <a :href="getBlockExplorerBaseUrl(chainId)+'/address/'+recipient.address" target="_blank" class="text-white text-break text-decoration-none">
                   {{ recipient.label }}
                 </a>
               </td>
@@ -226,7 +226,7 @@ export default {
             onClick: () => window.open(this.getBlockExplorerBaseUrl(this.chainId)+"/tx/"+tx.hash, '_blank').focus()
           });
 
-          // update recipients list (emit removeFromRecipients event from AddRecipient.vue to Home.vue)
+          // update recipients list (emit removeFromRecipients event from RecipientsList.vue to Home.vue)
           this.$emit("updateRecipient", index, {
             address: this.editRecipientAddress,
             label: this.editRecipientLabel,

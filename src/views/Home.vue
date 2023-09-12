@@ -102,12 +102,23 @@
     @updateRecipient="updateRecipient"
   />
 
+  <!-- Managers list -->
+  <ManagersList 
+    v-if="distributorAddress && (managers.length > 0 || isCurrentUserOwner)" 
+    :key="managers.length" 
+    :managers="managers" 
+    :isCurrentUserOwner="isCurrentUserOwner" 
+    :distributorAddress="distributorAddress" 
+    @removeFromManagers="removeFromManagers"
+  />
+
   <!-- Info -->
   <Info v-if="distributorAddress && (recipients.length > 0 || isCurrentUserManager)" />
 </template>
 
 <script>
 import WaitingToast from "../components/WaitingToast.vue";
+import ManagersList from "../components/ManagersList.vue";
 import RecipientsList from "../components/RecipientsList.vue";
 import Info from "../components/Info.vue";
 import useChainHelpers from "../composables/useChainHelpers";
@@ -126,6 +137,7 @@ export default {
       filterNetwork: null,
       filterTokens: null,
       distributorAddress: null,
+      managers: [],
       recipients: [],
       waitingData: false
     }
@@ -133,6 +145,7 @@ export default {
 
   components: {
     Info,
+    ManagersList,
     RecipientsList,
     WaitingToast
   },
@@ -170,6 +183,7 @@ export default {
 
       // reset data
       this.recipients = [];
+      this.managers = [];
       this.isCurrentUserManager = false;
       this.isCurrentUserOwner = false;
 
@@ -211,7 +225,21 @@ export default {
         this.isCurrentUserManager = true;
       }
 
+      // get managers
+      const managers = await distributorContract.getManagers();
+
+      // parse managers
+      for (let i = 0; i < managers.length; i++) {
+        this.managers.push({
+          address: managers[i]
+        });
+      }
+
       this.waitingData = false;
+    },
+
+    removeFromManagers(index) {
+      this.managers.splice(index, 1);
     },
 
     removeFromRecipients(index) {
