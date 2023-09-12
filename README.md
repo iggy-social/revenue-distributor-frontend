@@ -1,6 +1,12 @@
 # Revenue Distributor frontend
 
-Load any deployed [RevenueDistributor](https://github.com/iggy-social/iggy-contracts/blob/main/contracts/distributor/RevenueDistributor.sol) smart contract and manage it.
+[RevenueDistributor.sol](https://github.com/iggy-social/iggy-contracts/blob/main/contracts/distributor/RevenueDistributor.sol) is a smart contract that can automate distributing revenue to select addresses.
+
+Website: https://distributor.iggy.social/ 
+
+If you don't have a `RevenueDistributor.sol` yet, create it via the website (find the Create button in the navigation bar).
+
+Once your distributor smart contract is created, enter its address in the input field and click Load data. Then you can add recipients and managers.
 
 ## Features
 - [Vue 3](https://v3.vuejs.org/guide/introduction.html#what-is-vue-js) as the foundation

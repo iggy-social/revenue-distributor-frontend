@@ -99,6 +99,7 @@
     :isCurrentUserManager="isCurrentUserManager" 
     :distributorAddress="distributorAddress" 
     @removeFromRecipients="removeFromRecipients"
+    @updateRecipient="updateRecipient"
   />
 
   <!-- Info -->
@@ -216,6 +217,10 @@ export default {
     removeFromRecipients(index) {
       this.recipients.splice(index, 1);
     },
+
+    updateRecipient(index, recipient) {
+      this.recipients[index] = recipient;
+    }
 
   },
 
