@@ -4,7 +4,7 @@
 
 Website: https://distributor.iggy.social/ 
 
-> To see the UI, you can try this test smart contract on the Songbird Network: [0xdc52D08c2726b4f1bf4D8078e780583Bb0063E2f](https://distributor.iggy.social/?addr=0xdc52D08c2726b4f1bf4D8078e780583Bb0063E2f).
+> To see the UI, you can try this test smart contract on the Base network: [0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9](https://distributor.iggy.social/?addr=0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9).
 
 If you don't have a `RevenueDistributor.sol` yet, create it via the website (find the Create button in the navigation bar).
 
