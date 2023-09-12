@@ -89,7 +89,19 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Revenue Distributor Frontend is a web3 app that allows you to manage any RevenueDistributor smart contract.</p>
+        <p>Revenue Distributor Frontend is a web3 app that allows you to manage any RevenueDistributor.sol smart contract.</p>
+
+        <p>All the code is open source and you can find it on GitHub:</p>
+
+        <ul>
+          <li>
+            <a href="https://github.com/iggy-social/revenue-distributor-frontend" target="_blank">Frontend code</a>
+          </li>
+
+          <li>
+            <a href="https://github.com/iggy-social/iggy-contracts/tree/main/contracts/distributor" target="_blank">Smart contract code</a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
