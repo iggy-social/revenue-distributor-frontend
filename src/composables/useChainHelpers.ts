@@ -13,12 +13,12 @@ export default function useChainHelpers() {
       "Arbitrum".toUpperCase(),
       "Base".toUpperCase(),
       "BNB Smart Chain".toUpperCase(),
-      "Ethereum".toUpperCase(),
       "Fantom".toUpperCase(),
       "Flare".toUpperCase(),
       "Gnosis Chain".toUpperCase(),
       "Optimism".toUpperCase(),
       "Polygon".toUpperCase(),
+      "Polygon zkEVM".toUpperCase(),
       "Songbird".toUpperCase(),
       "Coston Testnet".toUpperCase()
     ]
@@ -47,6 +47,8 @@ export default function useChainHelpers() {
       return "Polygon".toUpperCase();
     } else if (chainId === 250) {
       return "Fantom".toUpperCase();
+    } else if (chainId === 1101) {
+      return "Polygon zkEVM".toUpperCase();
     } else if (chainId === 4002) {
       return "Fantom Testnet".toUpperCase();
     } else if (chainId === 8453) {
@@ -234,8 +236,17 @@ export default function useChainHelpers() {
         blockExplorerUrls: [ "https://basescan.org" ],
         chainId: "0x2105",
         chainName: "Base",
-        nativeCurrency: { decimals: 18, name: "FLR", symbol: "FLR" }, 
+        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
         rpcUrls: ["https://mainnet.base.org"]
+      }] 
+    } else if (networkName == "Polygon zkEVM".toUpperCase()) {
+      method = "wallet_addEthereumChain"
+      params = [{ 
+        blockExplorerUrls: [ "https://zkevm.polygonscan.com/" ],
+        chainId: "0x44d",
+        chainName: "Polygon zkEVM",
+        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
+        rpcUrls: ["https://zkevm-rpc.com"]
       }] 
     }
 
