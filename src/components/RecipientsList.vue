@@ -9,6 +9,10 @@
           </button>
         </div>
 
+        <p v-if="recipients.length == 0" class="text-center">
+          There are no recipients yet.
+        </p>
+
         <!-- Recipients table -->
         <table class="table table-hover table-secondary table-borderless">
           <tbody>
@@ -101,8 +105,6 @@ export default {
 
   methods: {
     addToRecipients(recipient) {
-      console.log("Received recipient: ", recipient);
-
       this.recipients.push(recipient);
     },
 

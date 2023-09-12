@@ -93,7 +93,7 @@
 
   <!-- Recipients list -->
   <RecipientsList 
-    v-if="recipients.length > 0 && distributorAddress" 
+    v-if="distributorAddress && (recipients.length > 0 || isCurrentUserManager)" 
     :key="recipients.length" 
     :recipients="recipients" 
     :isCurrentUserManager="isCurrentUserManager" 
@@ -102,7 +102,7 @@
   />
 
   <!-- Info -->
-  <Info v-if="recipients.length > 0" />
+  <Info v-if="distributorAddress && (recipients.length > 0 || isCurrentUserManager)" />
 </template>
 
 <script>
