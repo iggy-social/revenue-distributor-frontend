@@ -1,4 +1,6 @@
 <template>
+
+  <!-- Search contract -->
   <div class="d-flex justify-content-center">
     <div class="card text-white bg-primary send-tokens-card">
       <div class="card-body text-center">
@@ -78,14 +80,30 @@
         </button>
         <!-- END Connect wallet button -->
 
+        <div v-if="isCurrentUserManager || isCurrentUserOwner">
+          <hr />
+
+          <p v-if="isCurrentUserManager && !isCurrentUserOwner">You are a manager of this RevenueDistributor contract.</p>
+          <p v-if="isCurrentUserOwner">You are the owner of this RevenueDistributor contract.</p>
+        </div>
+
       </div>
     </div>
   </div>
+
+  <!-- Recipients list -->
+  <RecipientsList v-if="recipients.length > 0" :recipients="recipients" />
+
+  <!-- Info -->
+  <Info v-if="recipients.length > 0" />
 </template>
 
 <script>
 import WaitingToast from "../components/WaitingToast.vue";
+import RecipientsList from "../components/RecipientsList.vue";
+import Info from "../components/Info.vue";
 import useChainHelpers from "../composables/useChainHelpers";
+import DistributorAbi from "../data/abi/DistributorAbi.json";
 import { ethers } from 'ethers';
 import { useEthers } from 'vue-dapp';
 import { useToast, TYPE } from "vue-toastification";
@@ -95,11 +113,20 @@ export default {
 
   data() {
     return {
+      isCurrentUserManager: false,
+      isCurrentUserOwner: false,
       filterNetwork: null,
       filterTokens: null,
       distributorAddress: null,
+      recipients: [],
       waitingData: false
     }
+  },
+
+  components: {
+    Info,
+    RecipientsList,
+    WaitingToast
   },
 
   created() {
@@ -120,6 +147,7 @@ export default {
   },
 
   methods: {
+
     changeNetwork(networkName) {
       const networkData = this.switchNetwork(networkName); 
 
@@ -127,7 +155,46 @@ export default {
         method: networkData.method, 
         params: networkData.params
       });
+    },
+
+    async loadData() {
+      this.waitingData = true;
+
+      // reset data
+      this.recipients = [];
+      this.isCurrentUserManager = false;
+      this.isCurrentUserOwner = false;
+
+      // interface of the contract
+      const distributorInterface = new ethers.utils.Interface(DistributorAbi);
+
+      // contract instance
+      const distributorContract = new ethers.Contract(this.distributorAddress, distributorInterface, this.signer);
+
+      // get recipients
+      this.recipients = await distributorContract.getRecipients();
+
+      console.log(this.recipients);
+
+      // get recipients length
+      const recipientsLength = await distributorContract.getRecipientsLength();
+      console.log("Length", Number(recipientsLength));
+
+      // check if current user is owner
+      const owner = await distributorContract.owner();
+      this.isCurrentUserOwner = String(owner).toLowerCase() === String(this.address).toLowerCase();
+
+      // if current user is not owner, check if current user is manager
+      if (!this.isCurrentUserOwner) {
+        this.isCurrentUserManager = await distributorContract.isManager(this.address);
+      } else {
+        // if current user is owner, also mark it as manager
+        this.isCurrentUserManager = true;
+      }
+
+      this.waitingData = false;
     }
+
   },
 
   setup() {

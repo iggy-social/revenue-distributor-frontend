@@ -69,7 +69,6 @@
 import Navbar from './components/Navbar.vue';
 import { MetaMaskConnector, WalletConnectConnector, CoinbaseWalletConnector } from 'vue-dapp';
 import rpcs from './data/rpcs.json';
-import { useUserStore } from './store/user';
 import { useEthers, useWallet } from 'vue-dapp';
 
 export default {
@@ -115,7 +114,6 @@ export default {
   setup() {
 		const { address, chainId, isActivated } = useEthers();
 		const { connectWith } = useWallet();
-		const userStore = useUserStore();
 
 		const coinbaseConnector = new CoinbaseWalletConnector({
 			appName: 'Vue Dapp',
@@ -138,29 +136,8 @@ export default {
 			connectWith,
 			isActivated,
 			mmConnector,
-			wcConnector,
-			userStore
+			wcConnector
 		}
-  },
-
-	watch: {
-		address(newVal, oldVal) {
-      if (newVal) {
-        this.userStore.setDefaultDomain();
-      }
-    },
-
-    chainId(newVal, oldVal) {
-      if (newVal) {
-        this.userStore.setDefaultDomain();
-      }
-    },
-
-		isActivated(newVal, oldVal) {
-			if (oldVal === true && newVal === false) { // if user disconnects, clear the local storage
-				localStorage.clear();
-			}
-		}
-	}
+  }
 }
 </script>
