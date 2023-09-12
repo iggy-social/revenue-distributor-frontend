@@ -16,6 +16,11 @@
         <!-- Recipients table -->
         <table class="table table-hover table-secondary table-borderless">
           <tbody>
+            <tr>
+              <th>Recipient</th>
+              <th>Percentage</th>
+              <th v-if="isCurrentUserManager">Actions</th>
+            </tr>
             <tr v-for="(recipient, index) in recipients" :key="recipient.address">
               <td>
                 <a :href="getBlockExplorerBaseUrl(chainId)+'/address/'+recipient.address" target="_blank" class="text-white text-decoration-none">
@@ -23,7 +28,7 @@
                 </a>
               </td>
               <td>{{ getPercentage(recipient.percentage) }}</td>
-              <td>
+              <td v-if="isCurrentUserManager">
                 <a 
                   @click="editPopulate(recipient)" class="text-white text-decoration-none" href="#" 
                   data-bs-toggle="modal" :data-bs-target="'#editRecipientModal'+index"
