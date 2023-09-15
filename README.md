@@ -19,4 +19,5 @@ Once your distributor smart contract is created, enter its address in the input 
 
 ## Distributor contracts for Iggy Social projects
 
-- SGB Chat (Songbird): `0x97203DE4aB5f1064618C727D80f16840DB8F4d59`
+- Basebook (Base): [0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9](https://revenue-distributor-frontend.vercel.app/?addr=0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9)
+- SGB Chat (Songbird): [0x97203DE4aB5f1064618C727D80f16840DB8F4d59](https://revenue-distributor-frontend.vercel.app/?addr=0x97203DE4aB5f1064618C727D80f16840DB8F4d59)
