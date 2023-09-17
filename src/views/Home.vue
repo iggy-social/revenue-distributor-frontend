@@ -112,20 +112,29 @@
     @removeFromManagers="removeFromManagers"
   />
 
+  <!-- Distributor Balance (check if balance is larger than 0) -->
+  <DistributorBalance 
+    v-if="distributorBalanceWei.lt(0)" 
+    :isCurrentUserOwner="isCurrentUserOwner" 
+    :distributorAddress="distributorAddress" 
+    :distributorBalanceWei="distributorBalanceWei"
+  />
+
   <!-- Info -->
   <Info v-if="distributorAddress && (recipients.length > 0 || isCurrentUserManager)" />
 </template>
 
 <script>
-import WaitingToast from "../components/WaitingToast.vue";
+import DistributorBalance from "../components/DistributorBalance.vue";
+import Info from "../components/Info.vue";
 import ManagersList from "../components/ManagersList.vue";
 import RecipientsList from "../components/RecipientsList.vue";
-import Info from "../components/Info.vue";
+import WaitingToast from "../components/WaitingToast.vue";
 import useChainHelpers from "../composables/useChainHelpers";
 import DistributorAbi from "../data/abi/DistributorAbi.json";
 import { ethers } from 'ethers';
 import { useEthers } from 'vue-dapp';
-import { useToast, TYPE } from "vue-toastification";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "Home",
@@ -137,6 +146,7 @@ export default {
       filterNetwork: null,
       filterTokens: null,
       distributorAddress: null,
+      distributorBalanceWei: null,
       managers: [],
       recipients: [],
       waitingData: false
@@ -144,6 +154,7 @@ export default {
   },
 
   components: {
+    DistributorBalance,
     Info,
     ManagersList,
     RecipientsList,
@@ -234,6 +245,9 @@ export default {
           address: managers[i]
         });
       }
+
+      // fetch distributor contract balance
+      this.distributorBalanceWei = await this.signer.provider.getBalance(this.distributorAddress);
 
       this.waitingData = false;
     },
