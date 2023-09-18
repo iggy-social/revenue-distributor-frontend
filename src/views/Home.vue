@@ -50,9 +50,10 @@
         <!-- Revenue Distributor Address Input -->
         <div class="mt-4">
           <input 
-            v-model="distributorAddress"
+            v-model="distributorAddrOrDomain"
             class="form-control form-control-lg text-center"
-            placeholder="Revenue Distributor address"
+            placeholder="Revenue Distributor address or domain" 
+            v-on:keyup.enter="loadData"
           >
         </div>
         <!-- END Revenue Distributor Address Input -->
@@ -114,7 +115,7 @@
 
   <!-- Distributor Balance (check if balance is larger than 0) -->
   <DistributorBalance 
-    v-if="Number(distributorBalanceWei) > 0" 
+    v-if="!isDistributorBalanceZero" 
     :isCurrentUserOwner="isCurrentUserOwner" 
     :distributorAddress="distributorAddress" 
     :distributorBalanceWei="distributorBalanceWei"
@@ -132,15 +133,17 @@ import RecipientsList from "../components/RecipientsList.vue";
 import WaitingToast from "../components/WaitingToast.vue";
 import useChainHelpers from "../composables/useChainHelpers";
 import DistributorAbi from "../data/abi/DistributorAbi.json";
+import useDomainHelpers from "../composables/useDomainHelpers";
 import { ethers } from 'ethers';
 import { useEthers } from 'vue-dapp';
-import { useToast } from "vue-toastification";
+import { useToast, TYPE } from "vue-toastification";
 
 export default {
   name: "Home",
 
   data() {
     return {
+      distributorAddrOrDomain: null,
       isCurrentUserManager: false,
       isCurrentUserOwner: false,
       filterNetwork: null,
@@ -162,10 +165,31 @@ export default {
   },
 
   created() {
-    this.distributorAddress = this.$route.query.addr; // pass contract address through URL query (e.g. ?addr=0x123...abc)
+    // pass contract address through URL query (e.g. ?addr=0x123...abc, or ?id=0x123...abc)
+    if (this.$route.query.addr) {
+      this.distributorAddrOrDomain = this.$route.query.addr;
+    } else if (this.$route.query.id) {
+      this.distributorAddrOrDomain = this.$route.query.id;
+    }
   },
 
   computed: {
+
+    isDistributorBalanceZero() {
+      if (!this.distributorBalanceWei) {
+        return true;
+      }
+      
+      if (this.distributorBalanceWei) {
+        if (Number(this.distributorBalanceWei) === 0) {
+          return true;
+        } else if (!this.distributorBalanceWei.lt(0)) {
+          return true;
+        }
+      } 
+
+      return false;
+    },
 
     getNetworks() {
       const networkNames = this.getSupportedChains();
@@ -190,66 +214,90 @@ export default {
     },
 
     async loadData() {
-      this.waitingData = true;
-
       // reset data
       this.recipients = [];
       this.managers = [];
       this.isCurrentUserManager = false;
       this.isCurrentUserOwner = false;
+      this.distributorBalanceWei = null;
+      this.distributorAddress = null;
 
-      // interface of the contract
-      const distributorInterface = new ethers.utils.Interface(DistributorAbi);
+      try {
+        this.waitingData = true;
 
-      // contract instance
-      const distributorContract = new ethers.Contract(this.distributorAddress, distributorInterface, this.signer);
+        //if (!String(this.distributorAddrOrDomain).includes(".") && String(this.distributorAddrOrDomain.startsWith("0x"))) {
+          // if it starts with 0x and does not contain a dot, it is very likely an address
 
-      // get recipients length
-      const recipientsLength = await distributorContract.getRecipientsLength();
+        if (ethers.utils.isAddress(this.distributorAddrOrDomain)) {
+          this.distributorAddress = this.distributorAddrOrDomain;
+        } else {
+          this.distributorAddress = await this.getDomainHolder(this.distributorAddrOrDomain);
+          
+          if (!this.distributorAddress || this.distributorAddress === ethers.constants.AddressZero) {
+            this.toast("This name does not have an owner.", {type: TYPE.ERROR});
+            this.waitingData = false;
+            return;
+          }
+        }
 
-      // get recipients
-      const recipientsObject = await distributorContract.getRecipients();
+        // interface of the contract
+        const distributorInterface = new ethers.utils.Interface(DistributorAbi);
 
-      // parse recipients
-      for (let i = 0; i < Number(recipientsLength); i++) {
-        const recipient = recipientsObject[i];
-        const recipientAddress = recipient[0];
-        const recipientLabel = recipient[1];
-        const recipientPercentage = recipient[2];
+        // contract instance
+        const distributorContract = new ethers.Contract(this.distributorAddress, distributorInterface, this.signer);
 
-        this.recipients.push({
-          address: recipientAddress,
-          label: recipientLabel,
-          percentage: recipientPercentage
-        });
+        // get recipients length
+        const recipientsLength = await distributorContract.getRecipientsLength();
+
+        // get recipients
+        const recipientsObject = await distributorContract.getRecipients();
+
+        // parse recipients
+        for (let i = 0; i < Number(recipientsLength); i++) {
+          const recipient = recipientsObject[i];
+          const recipientAddress = recipient[0];
+          const recipientLabel = recipient[1];
+          const recipientPercentage = recipient[2];
+
+          this.recipients.push({
+            address: recipientAddress,
+            label: recipientLabel,
+            percentage: recipientPercentage
+          });
+        }
+
+        // check if current user is owner
+        const owner = await distributorContract.owner();
+        this.isCurrentUserOwner = String(owner).toLowerCase() === String(this.address).toLowerCase();
+
+        // if current user is not owner, check if current user is manager
+        if (!this.isCurrentUserOwner) {
+          this.isCurrentUserManager = await distributorContract.isManager(this.address);
+        } else {
+          // if current user is owner, also mark it as manager
+          this.isCurrentUserManager = true;
+        }
+
+        // get managers
+        const managers = await distributorContract.getManagers();
+
+        // parse managers
+        for (let i = 0; i < managers.length; i++) {
+          this.managers.push({
+            address: managers[i]
+          });
+        }
+
+        // fetch distributor contract balance
+        this.distributorBalanceWei = await this.signer.provider.getBalance(this.distributorAddress);
+
+        this.waitingData = false;
+      } catch (error) {
+        console.log(error);
+        this.toast(error.message, {type: TYPE.ERROR});
+        this.waitingData = false;
+        return;
       }
-
-      // check if current user is owner
-      const owner = await distributorContract.owner();
-      this.isCurrentUserOwner = String(owner).toLowerCase() === String(this.address).toLowerCase();
-
-      // if current user is not owner, check if current user is manager
-      if (!this.isCurrentUserOwner) {
-        this.isCurrentUserManager = await distributorContract.isManager(this.address);
-      } else {
-        // if current user is owner, also mark it as manager
-        this.isCurrentUserManager = true;
-      }
-
-      // get managers
-      const managers = await distributorContract.getManagers();
-
-      // parse managers
-      for (let i = 0; i < managers.length; i++) {
-        this.managers.push({
-          address: managers[i]
-        });
-      }
-
-      // fetch distributor contract balance
-      this.distributorBalanceWei = await this.signer.provider.getBalance(this.distributorAddress);
-
-      this.waitingData = false;
     },
 
     removeFromManagers(index) {
@@ -270,9 +318,10 @@ export default {
     const { address, balance, chainId, isActivated, signer } = useEthers();
     const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchNetwork } = useChainHelpers();
     const toast = useToast();
+    const { getDomainHolder } = useDomainHelpers();
 
     return { 
-      address, balance, chainId, getBlockExplorerBaseUrl, getChainName, getSupportedChains, 
+      address, balance, chainId, getDomainHolder, getBlockExplorerBaseUrl, getChainName, getSupportedChains, 
       isActivated, signer, switchNetwork, toast 
     }
   }
