@@ -114,7 +114,7 @@
 
   <!-- Distributor Balance (check if balance is larger than 0) -->
   <DistributorBalance 
-    v-if="distributorBalanceWei.lt(0)" 
+    v-if="Number(distributorBalanceWei) > 0" 
     :isCurrentUserOwner="isCurrentUserOwner" 
     :distributorAddress="distributorAddress" 
     :distributorBalanceWei="distributorBalanceWei"
