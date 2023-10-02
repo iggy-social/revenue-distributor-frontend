@@ -120,7 +120,7 @@
       </div>
 
       <div class="modal-body">
-        <p>Create a new RevenueDistributor smart contract.</p>
+        <p v-if="!newDistributorAddress">Create a new RevenueDistributor smart contract.</p>
 
         <!-- Unique ID -->
         <div class="mb-4" v-if="!newDistributorAddress">
@@ -133,18 +133,28 @@
           <div id="uniqueIdHelp" class="form-text">This is just in case the frontend will not show you the new distributor address and you'll need to find it manually.</div>
         </div>
 
+        <p v-if="newDistributorAddress">Success! Contract created!</p>
+
         <p v-if="newDistributorAddress">
-          This is the address of your new RevenueDistributor contract: 
-          <a :href="this.getBlockExplorerBaseUrl(this.chainId)+'/address/'+newDistributorAddress" target="_blank">
+          Click here to manage your new RevenueDistributor contract: 
+          <a :href="'https://distributor.iggy.social/?addr='+newDistributorAddress+'&chain='+this.chainId">
             {{ newDistributorAddress }}
           </a>.
+        </p>
+
+        <hr />
+
+        <p v-if="newDistributorAddress">
+          <a :href="this.getBlockExplorerBaseUrl(this.chainId)+'/address/'+newDistributorAddress" target="_blank">
+            See the contract on block explorer.
+          </a>
         </p>
 
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button @click="create" type="button" class="btn btn-primary" :disabled="waitingCreate || !uniqueId">
+        <button v-if="!newDistributorAddress" @click="create" type="button" class="btn btn-primary" :disabled="waitingCreate || !uniqueId">
           <span v-if="waitingCreate" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Submit
         </button>
