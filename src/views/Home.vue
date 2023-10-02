@@ -60,7 +60,7 @@
 
         <!-- Load button -->
         <button
-          v-if="isActivated"
+          v-if="isActivated && !showSwitchChain"
           class="btn btn-lg btn-dark mt-4 mb-2"
           :disabled="waitingData"
           @click="loadData"
@@ -69,6 +69,26 @@
           Load Data
         </button>
         <!-- END Load button -->
+
+        <!-- Copy URL button -->
+        <button
+          v-if="isActivated && !showSwitchChain && getContractUrl"
+          class="btn btn-lg btn-outline-dark mt-4 mb-2 ms-2"
+          @click="copyUrl"
+        >
+          Copy URL
+        </button>
+        <!-- END Copy URL button -->
+
+        <!-- Switch network button -->
+        <button
+          v-if="isActivated && showSwitchChain"
+          class="btn btn-lg btn-dark mt-4 mb-2"
+          @click="changeNetwork(urlChainName)"
+        >
+          Switch to {{ urlChainName }}
+        </button>
+        <!-- END Switch network button -->
 
         <!-- Connect wallet button -->
         <button
@@ -152,6 +172,7 @@ export default {
       distributorBalanceWei: null,
       managers: [],
       recipients: [],
+      urlChain: null,
       waitingData: false
     }
   },
@@ -171,9 +192,22 @@ export default {
     } else if (this.$route.query.id) {
       this.distributorAddrOrDomain = this.$route.query.id;
     }
+
+    if (this.$route.query.chain) {
+      this.urlChain = this.$route.query.chain;
+      this.urlChainName = this.getChainName(Number(this.urlChain));
+    }
   },
 
   computed: {
+
+    getContractUrl() {
+      if (this.distributorAddress && this.chainId) {
+        return "https://distributor.iggy.social/?addr=" + this.distributorAddress + "&chain=" + this.chainId;
+      }
+
+      return null;
+    },
 
     isDistributorBalanceZero() {
       if (!this.distributorBalanceWei) {
@@ -199,6 +233,16 @@ export default {
       }
 
       return networkNames;
+    },
+
+    showSwitchChain() {
+      if (this.urlChain && this.chainId) {
+        if (Number(this.urlChain) !== Number(this.chainId)) {
+          return true;
+        }
+      }
+
+      return false;
     }
   },
 
@@ -211,6 +255,11 @@ export default {
         method: networkData.method, 
         params: networkData.params
       });
+    },
+
+    copyUrl() {
+      navigator.clipboard.writeText(this.getContractUrl);
+      this.toast("Copied to clipboard.", {type: TYPE.SUCCESS});
     },
 
     async loadData() {
