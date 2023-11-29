@@ -36,3 +36,4 @@ See [/src/data/factories.json](https://github.com/iggy-social/revenue-distributo
 - Basebook (Base): [0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9](https://distributor.iggy.social/?addr=0xF1aB28FEfFB7E5BF34b03354267895516a0Cf9E9&chain=8453) (aka distributor.basebook).
 - FLR Chat (Flare): [0xFbaf1D1fBC5a2Fe2e48858a8A4585d5e7C12fc4A](https://distributor.iggy.social/?addr=0xFbaf1D1fBC5a2Fe2e48858a8A4585d5e7C12fc4A&chain=14) (aka distributor.flr).
 - SGB Chat (Songbird): [0x97203DE4aB5f1064618C727D80f16840DB8F4d59](https://distributor.iggy.social/?addr=0x97203DE4aB5f1064618C727D80f16840DB8F4d59&chain=19) (aka distributor.sgb).
+- AlwaysLiquid (Arbitrum): [0xcd1B58a51F7BA50FE5516eA71d3eb518e4aC98CF](https://distributor.iggy.social/?addr=0xcd1B58a51F7BA50FE5516eA71d3eb518e4aC98CF&chain=42161) (aka distributor.arbi).
