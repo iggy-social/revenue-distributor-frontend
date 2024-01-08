@@ -73,7 +73,7 @@
         <!-- Copy URL button -->
         <button
           v-if="isActivated && !showSwitchChain && getContractUrl && distributorAddress && (recipients.length > 0 || isCurrentUserManager)"
-          class="btn btn-lg btn-outline-dark mt-4 mb-2 ms-2"
+          class="btn btn-lg btn-outline-light mt-4 mb-2 ms-2"
           @click="copyUrl"
         >
           Copy URL
