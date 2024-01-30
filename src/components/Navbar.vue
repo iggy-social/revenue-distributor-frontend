@@ -137,7 +137,7 @@
 
         <p v-if="newDistributorAddress">
           Click here to manage your new RevenueDistributor contract: 
-          <a :href="'https://distributor.iggy.social/?addr='+newDistributorAddress+'&chain='+this.chainId">
+          <a :href="getContractUrl">
             {{ newDistributorAddress }}
           </a>.
         </p>
@@ -193,6 +193,14 @@ export default {
   },
 
   computed: {
+    getContractUrl() {
+      if (this.newDistributorAddress) {
+        return window.location.origin + "/?addr=" + this.newDistributorAddress + "&chain=" + this.chainId;
+      }
+
+      return null;
+    },
+
     getDomainOrAddress() {
       if (this.userStore.getDefaultDomain) {
         return this.userStore.getDefaultDomain;

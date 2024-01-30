@@ -203,7 +203,7 @@ export default {
 
     getContractUrl() {
       if (this.distributorAddress && this.chainId) {
-        return "https://distributor.iggy.social/?addr=" + this.distributorAddress + "&chain=" + this.chainId;
+        return window.location.origin + "/?addr=" + this.distributorAddress + "&chain=" + this.chainId;
       }
 
       return null;

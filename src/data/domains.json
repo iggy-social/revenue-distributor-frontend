@@ -153,6 +153,11 @@
     "address": "0x3490C9817C45A2a394b11A3807f58a8325235aE0",
     "protocol": "PD"
   },
+  ".testmode": {
+    "chainId": 919,
+    "address": "0x32749Ab66ef1B85aFfF3425d5766d8025E407769",
+    "protocol": "PD"
+  },
   ".wagmi": {
     "chainId": 10,
     "address": "0xC3E8922657686EC63eaaa9FC1Fe06826802e7e0f",
