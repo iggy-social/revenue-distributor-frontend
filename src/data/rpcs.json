@@ -9,10 +9,10 @@
   "137": "https://polygon-mainnet.public.blastapi.io",
   "250": "https://fantom-mainnet.public.blastapi.io",
   "592": "https://1rpc.io/astr",
-  "919": "https://sepolia.mode.network/",
   "1101": "https://zkevm-rpc.com",
   "1284": "https://1rpc.io/glmr",
   "8453": "https://mainnet.base.org",
+  "34443": "https://mainnet.mode.network/",
   "42161": "https://arbitrum.meowrpc.com",
   "43114": "https://1rpc.io/avax/c"
 }

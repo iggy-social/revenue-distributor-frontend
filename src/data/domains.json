@@ -94,6 +94,11 @@
     "address": "0x526Ff108F5d422d0e1d6650E2Bc015BBE1fdb058",
     "protocol": "PD"
   },
+  ".modechat": {
+    "chainId": 34443,
+    "address": "0x523a7050df3DC7E96B7faAF4dDECCc244d886a90",
+    "protocol": "PD"
+  },
   ".nft": {
     "chainId": 1,
     "protocol": "UD"
@@ -151,11 +156,6 @@
   ".spartan": {
     "chainId": 10,
     "address": "0x3490C9817C45A2a394b11A3807f58a8325235aE0",
-    "protocol": "PD"
-  },
-  ".testmode": {
-    "chainId": 919,
-    "address": "0x32749Ab66ef1B85aFfF3425d5766d8025E407769",
     "protocol": "PD"
   },
   ".wagmi": {

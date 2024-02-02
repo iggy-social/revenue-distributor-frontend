@@ -16,12 +16,12 @@ export default function useChainHelpers() {
       "Fantom".toUpperCase(),
       "Flare".toUpperCase(),
       "Gnosis Chain".toUpperCase(),
+      "Mode Mainnet".toUpperCase(),
       "Optimism".toUpperCase(),
       "Polygon".toUpperCase(),
       "Polygon zkEVM".toUpperCase(),
       "Songbird".toUpperCase(),
-      "Coston Testnet".toUpperCase(),
-      "Mode Testnet".toUpperCase()
+      "Coston Testnet".toUpperCase()
     ]
   }
 
@@ -48,14 +48,14 @@ export default function useChainHelpers() {
       return "Polygon".toUpperCase();
     } else if (chainId === 250) {
       return "Fantom".toUpperCase();
-    } else if (chainId === 919) {
-      return "Mode Testnet".toUpperCase();
     } else if (chainId === 1101) {
       return "Polygon zkEVM".toUpperCase();
     } else if (chainId === 4002) {
       return "Fantom Testnet".toUpperCase();
     } else if (chainId === 8453) {
       return "Base".toUpperCase();
+    } else if (chainId === 34443) {
+      return "Mode Mainnet".toUpperCase();
     } else if (chainId === 42161) {
       return "Arbitrum".toUpperCase();
     } else if (chainId === 421611) {
@@ -251,14 +251,14 @@ export default function useChainHelpers() {
         nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
         rpcUrls: ["https://zkevm-rpc.com"]
       }] 
-    } else if (networkName == "Mode Testnet".toUpperCase()) {
+    } else if (networkName == "Mode Mainnet".toUpperCase()) {
       method = "wallet_addEthereumChain"
       params = [{ 
-        blockExplorerUrls: [ "https://sepolia.explorer.mode.network/" ],
-        chainId: ethers.utils.hexValue(919),
+        blockExplorerUrls: [ "https://explorer.mode.network/" ],
+        chainId: ethers.utils.hexValue(34443),
         chainName: networkName,
         nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://sepolia.mode.network/"]
+        rpcUrls: ["https://mainnet.mode.network/"]
       }] 
     }
 
