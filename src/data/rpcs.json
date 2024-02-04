@@ -14,5 +14,6 @@
   "8453": "https://mainnet.base.org",
   "34443": "https://mainnet.mode.network/",
   "42161": "https://arbitrum.meowrpc.com",
-  "43114": "https://1rpc.io/avax/c"
+  "43114": "https://1rpc.io/avax/c",
+  "534352": "https://rpc.scroll.io"
 }

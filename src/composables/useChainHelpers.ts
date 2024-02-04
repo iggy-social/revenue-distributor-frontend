@@ -20,6 +20,7 @@ export default function useChainHelpers() {
       "Optimism".toUpperCase(),
       "Polygon".toUpperCase(),
       "Polygon zkEVM".toUpperCase(),
+      "Scroll".toUpperCase(),
       "Songbird".toUpperCase(),
       "Coston Testnet".toUpperCase()
     ]
@@ -64,6 +65,8 @@ export default function useChainHelpers() {
       return "Arbitrum Goerli Testnet".toUpperCase();
     } else if (chainId === 80001) {
       return "Polygon Testnet".toUpperCase();
+    } else if (chainId === 534352) {
+      return "Scroll".toUpperCase();
     } else if (chainId === 1313161555) {
       return "Aurora Testnet".toUpperCase();
     } else {
@@ -259,6 +262,15 @@ export default function useChainHelpers() {
         chainName: networkName,
         nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
         rpcUrls: ["https://mainnet.mode.network/"]
+      }] 
+    } else if (networkName == "Scroll".toUpperCase()) {
+      method = "wallet_addEthereumChain"
+      params = [{ 
+        blockExplorerUrls: [ "https://scrollscan.com/" ],
+        chainId: ethers.utils.hexValue(534352),
+        chainName: networkName,
+        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
+        rpcUrls: ["https://rpc.scroll.io"]
       }] 
     }
 

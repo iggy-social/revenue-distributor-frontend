@@ -39,3 +39,4 @@ See [/src/data/factories.json](https://github.com/iggy-social/revenue-distributo
 - AlwaysLiquid (Arbitrum): [0xcd1B58a51F7BA50FE5516eA71d3eb518e4aC98CF](https://distributor.iggy.social/?addr=0xcd1B58a51F7BA50FE5516eA71d3eb518e4aC98CF&chain=42161) (aka distributor.arbi).
 - AlwaysLiquid (Fantom): [0x90BbcF08d82e276262267a9dB9014C979b70Db3c](https://distributor.iggy.social/?addr=0x90BbcF08d82e276262267a9dB9014C979b70Db3c&chain=250) (aka distributor.fantom).
 - Pool Chat (Optimism): [0x1eB2641eA0021567208C29f3200b7f1e68d92f85](https://distributor.iggy.social/?addr=0x1eB2641eA0021567208C29f3200b7f1e68d92f85&chain=10).
+- Scrolly Hub (Scroll): [0x0E66249733DDFe422F7A127B0b9E906601F23E06](https://distributor.iggy.social/?addr=0x0E66249733DDFe422F7A127B0b9E906601F23E06&chain=534352).
