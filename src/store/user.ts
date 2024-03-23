@@ -1,12 +1,4 @@
 import { defineStore } from 'pinia';
-import { useEthers } from 'vue-dapp';
-import { ethers } from 'ethers';
-import useDomainHelpers from "../composables/useDomainHelpers";
-import tokens from "../data/tokens.json";
-import Erc20Abi from "../data/abi/Erc20Abi.json";
-
-const { address, balance, chainId, signer } = useEthers();
-const { getEnsDomain, getPunkDomain } = useDomainHelpers();
 
 export const useUserStore = defineStore({
   id: 'user',

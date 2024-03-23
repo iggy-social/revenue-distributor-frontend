@@ -64,7 +64,7 @@
               </span>
             </a>
             
-            <span class="dropdown-item" @click="disconnect">Disconnect</span>
+            <span class="dropdown-item" @click="disconnectWallet">Disconnect</span>
           </div>
         </li>
 
@@ -222,12 +222,7 @@ export default {
 
   methods: {
     changeNetwork(networkName) {
-      const networkData = this.switchNetwork(networkName); 
-
-      window.ethereum.request({ 
-        method: networkData.method, 
-        params: networkData.params
-      });
+      this.switchOrAddChain(window.ethereum, networkName);
     },
 
     async create() {
@@ -288,6 +283,11 @@ export default {
         console.log(e);
         this.toast(e.message, {type: TYPE.ERROR});
       }
+    },
+
+    disconnectWallet() {
+      this.disconnect();
+      window.localStorage.removeItem("connected");
     }
   },
 
@@ -295,7 +295,7 @@ export default {
     const { open } = useBoard();
 		const { address, chainId, isActivated, signer } = useEthers();
 		const { disconnect } = useWallet();
-		const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchNetwork } = useChainHelpers();
+		const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchOrAddChain } = useChainHelpers();
     const userStore = useUserStore();
     const toast = useToast();
 
@@ -310,7 +310,7 @@ export default {
 			open,
 			shortenAddress,
       signer,
-			switchNetwork,
+			switchOrAddChain,
       toast,
       userStore
 		}

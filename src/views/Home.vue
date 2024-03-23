@@ -41,7 +41,7 @@
                 v-for="networkName in getNetworks"
                 :key="networkName"
                 @click="changeNetwork(networkName)"
-              >SWITCH TO {{ networkName }}</button>
+              >Switch to {{ networkName }}</button>
             </li>
           </div>
         </div>
@@ -249,12 +249,7 @@ export default {
   methods: {
 
     changeNetwork(networkName) {
-      const networkData = this.switchNetwork(networkName); 
-
-      window.ethereum.request({ 
-        method: networkData.method, 
-        params: networkData.params
-      });
+      this.switchOrAddChain(window.ethereum, networkName);
     },
 
     copyUrl() {
@@ -365,13 +360,13 @@ export default {
 
   setup() {
     const { address, balance, chainId, isActivated, signer } = useEthers();
-    const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchNetwork } = useChainHelpers();
+    const { getBlockExplorerBaseUrl, getChainName, getSupportedChains, switchOrAddChain } = useChainHelpers();
     const toast = useToast();
     const { getDomainHolder } = useDomainHelpers();
 
     return { 
       address, balance, chainId, getDomainHolder, getBlockExplorerBaseUrl, getChainName, getSupportedChains, 
-      isActivated, signer, switchNetwork, toast 
+      isActivated, signer, switchOrAddChain, toast 
     }
   }
 

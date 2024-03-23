@@ -1,81 +1,32 @@
 import { ethers } from 'ethers';
-import rpcs from '../data/rpcs.json';
-import explorers from '../data/explorers.json';
 
 export default function useChainHelpers() {
 
   function getBlockExplorerBaseUrl(networkId) {
-    return explorers[String(networkId)];
+    let chain = chains.find(chain => chain.chainId == networkId);
+    return chain.blockExplorer;
   }
 
   function getSupportedChains() {
-    return [
-      "Arbitrum".toUpperCase(),
-      "Base".toUpperCase(),
-      "BNB Smart Chain".toUpperCase(),
-      "Fantom".toUpperCase(),
-      "Flare".toUpperCase(),
-      "Gnosis Chain".toUpperCase(),
-      "Mode Mainnet".toUpperCase(),
-      "Optimism".toUpperCase(),
-      "Polygon".toUpperCase(),
-      "Polygon zkEVM".toUpperCase(),
-      "Scroll".toUpperCase(),
-      "Songbird".toUpperCase(),
-      "Coston Testnet".toUpperCase()
-    ]
+    // get chain names, turn to uppercase and return array
+
+    let chainNames = chains.map(chain => chain.name.toUpperCase());
+    return chainNames;
   }
 
   function getChainName(chainId) {
-    if (chainId === 1) {
-      return "Ethereum".toUpperCase();
-    } else if (chainId === 10) {
-      return "Optimism".toUpperCase();
-    } else if (chainId === 14) {
-      return "Flare".toUpperCase();
-    } else if (chainId === 16) {
-      return "Coston Testnet".toUpperCase();
-    } else if (chainId === 19) {
-      return "Songbird".toUpperCase();
-    } else if (chainId === 56) {
-      return "BNB Smart Chain".toUpperCase();
-    } else if (chainId === 69) {
-      return "Optimism Testnet".toUpperCase();
-    } else if (chainId === 77) {
-      return "Gnosis Testnet".toUpperCase();
-    } else if (chainId === 100) {
-      return "Gnosis Chain".toUpperCase();
-    } else if (chainId === 137) {
-      return "Polygon".toUpperCase();
-    } else if (chainId === 250) {
-      return "Fantom".toUpperCase();
-    } else if (chainId === 1101) {
-      return "Polygon zkEVM".toUpperCase();
-    } else if (chainId === 4002) {
-      return "Fantom Testnet".toUpperCase();
-    } else if (chainId === 8453) {
-      return "Base".toUpperCase();
-    } else if (chainId === 34443) {
-      return "Mode Mainnet".toUpperCase();
-    } else if (chainId === 42161) {
-      return "Arbitrum".toUpperCase();
-    } else if (chainId === 421611) {
-      return "Arbitrum Testnet".toUpperCase();
-    } else if (chainId === 421613) {
-      return "Arbitrum Goerli Testnet".toUpperCase();
-    } else if (chainId === 80001) {
-      return "Polygon Testnet".toUpperCase();
-    } else if (chainId === 534352) {
-      return "Scroll".toUpperCase();
-    } else if (chainId === 1313161555) {
-      return "Aurora Testnet".toUpperCase();
-    } else {
-      return "Unsupported Network".toUpperCase();
+    let chain = chains.find(chain => chain.chainId == chainId);
+
+    if (chain) {
+      return chain.name.toUpperCase();
     }
+    
+    return "Unsupported Network".toUpperCase();
   }
 
   function getFallbackProvider(networkId) {
-    let urls = [rpcs[String(networkId)]];
+    let chain = chains.find(chain => chain.chainId == networkId);
+    let urls = [chain.rpc1];
 
     if (urls) {
       const providers = urls.map(url => new ethers.providers.JsonRpcProvider(url));
@@ -85,198 +36,39 @@ export default function useChainHelpers() {
     }
   }
 
-  function switchNetwork(networkName) {
-    let method;
-    let params;
+  async function switchOrAddChain(ethereum, networkName) {
+    // get network id from chains
+    let chain = chains.find(chain => chain.name.toUpperCase() == networkName);
+    let chainId = chain.chainId;
 
-    if (networkName == "Ethereum".toUpperCase()) {
-      method = "wallet_switchEthereumChain"
-      params = [{ chainId: "0x1" }] 
-    } else if (networkName == "Polygon Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://mumbai.polygonscan.com" ],
-        chainId: "0x13881",
-        chainName: "Mumbai Testnet",
-        nativeCurrency: { decimals: 18, name: "Matic", symbol: "MATIC" }, 
-        rpcUrls: ["https://matic-mumbai.chainstacklabs.com"]
-      }] 
-    } else if (networkName == "Arbitrum Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://testnet.arbiscan.io" ],
-        chainId: "0x66EEB",
-        chainName: "Arbitrum Testnet",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://rinkeby.arbitrum.io/rpc"]
-      }] 
-    } else if (networkName == "Arbitrum Goerli Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://goerli.arbiscan.io" ],
-        chainId: "0x66EED",
-        chainName: "Arbitrum Goerli Testnet".toUpperCase(),
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://goerli-rollup.arbitrum.io/rpc"]
-      }] 
-    } else if (networkName == "Arbitrum".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://arbiscan.io" ],
-        chainId: "0xA4B1",
-        chainName: "Arbitrum One",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://1rpc.io/arb"]
-      }] 
-    } else if (networkName == "Optimism".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://optimistic.etherscan.io/" ],
-        chainId: "0xA",
-        chainName: "Optimism",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://1rpc.io/op"]
-      }] 
-    } else if (networkName == "Optimism Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://kovan-optimistic.etherscan.io/" ],
-        chainId: "0x45",
-        chainName: "Optimism Testnet",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://kovan.optimism.io"]
-      }] 
-    } else if (networkName == "Polygon".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://polygonscan.com" ],
-        chainId: "0x89",
-        chainName: "Polygon PoS Chain",
-        nativeCurrency: { decimals: 18, name: "MATIC", symbol: "MATIC" }, 
-        rpcUrls: ["https://1rpc.io/matic"]
-      }] 
-    } else if (networkName == "Gnosis Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://blockscout.com/poa/sokol" ],
-        chainId: "0x4D",
-        chainName: "Gnosis Testnet",
-        nativeCurrency: { decimals: 18, name: "SPOA", symbol: "SPOA" }, 
-        rpcUrls: ["https://sokol.poa.network"]
-      }] 
-    } else if (networkName == "Gnosis Chain".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://gnosisscan.io/" ],
-        chainId: "0x64",
-        chainName: "Gnosis Chain",
-        nativeCurrency: { decimals: 18, name: "XDAI", symbol: "XDAI" }, 
-        rpcUrls: ["https://rpc.gnosischain.com"]
-      }] 
-    } else if (networkName == "BNB Smart Chain".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://bscscan.com/" ],
-        chainId: "0x38",
-        chainName: "BNB Smart Chain",
-        nativeCurrency: { decimals: 18, name: "BNB", symbol: "BNB" }, 
-        rpcUrls: ["https://1rpc.io/bnb"]
-      }] 
-    } else if (networkName == "Aurora Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://testnet.aurorascan.dev/" ],
-        chainId: "0x4E454153",
-        chainName: "Aurora Testnet",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://testnet.aurora.dev"]
-      }] 
-    } else if (networkName == "Songbird".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://songbird-explorer.flare.network/" ],
-        chainId: "0x13",
-        chainName: "Songbird",
-        nativeCurrency: { decimals: 18, name: "SGB", symbol: "SGB" }, 
-        rpcUrls: ["https://songbird-api.flare.network/ext/C/rpc"]
-      }] 
-    } else if (networkName == "Fantom".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://ftmscan.com" ],
-        chainId: "0xFA",
-        chainName: "Fantom",
-        nativeCurrency: { decimals: 18, name: "FTM", symbol: "FTM" }, 
-        rpcUrls: ["https://1rpc.io/ftm"]
-      }] 
-    } else if (networkName == "Fantom Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://testnet.ftmscan.com" ],
-        chainId: "0xFA2",
-        chainName: "Fantom Testnet",
-        nativeCurrency: { decimals: 18, name: "FTM", symbol: "FTM" }, 
-        rpcUrls: ["https://rpc.ankr.com/fantom_testnet"]
-      }] 
-    } else if (networkName == "Coston Testnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://coston-explorer.flare.network" ],
-        chainId: "0x10",
-        chainName: "Coston Testnet",
-        nativeCurrency: { decimals: 18, name: "FLR", symbol: "FLR" }, 
-        rpcUrls: ["https://coston-api.flare.network/ext/C/rpc"]
-      }] 
-    } else if (networkName == "Flare".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://flare-explorer.flare.network" ],
-        chainId: "0xE",
-        chainName: "Flare",
-        nativeCurrency: { decimals: 18, name: "FLR", symbol: "FLR" }, 
-        rpcUrls: ["https://flare-api.flare.network/ext/C/rpc"]
-      }] 
-    } else if (networkName == "Base".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://basescan.org" ],
-        chainId: "0x2105",
-        chainName: "Base",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://mainnet.base.org"]
-      }] 
-    } else if (networkName == "Polygon zkEVM".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://zkevm.polygonscan.com/" ],
-        chainId: "0x44d",
-        chainName: "Polygon zkEVM",
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://zkevm-rpc.com"]
-      }] 
-    } else if (networkName == "Mode Mainnet".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://explorer.mode.network/" ],
-        chainId: ethers.utils.hexValue(34443),
-        chainName: networkName,
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://mainnet.mode.network/"]
-      }] 
-    } else if (networkName == "Scroll".toUpperCase()) {
-      method = "wallet_addEthereumChain"
-      params = [{ 
-        blockExplorerUrls: [ "https://scrollscan.com/" ],
-        chainId: ethers.utils.hexValue(534352),
-        chainName: networkName,
-        nativeCurrency: { decimals: 18, name: "ETH", symbol: "ETH" }, 
-        rpcUrls: ["https://rpc.scroll.io"]
-      }] 
-    }
-
-    return { 
-      method: method, 
-      params: params
+    try {
+      await ethereum.request({
+        "method": "wallet_switchEthereumChain",
+        "params": [
+          {
+            "chainId": ethers.utils.hexValue(chainId)
+          }
+        ]
+      });
+    } catch (error) {
+      if (error.code === 4902) {
+        await ethereum.request({
+          "method": "wallet_addEthereumChain",
+          "params": [
+            {
+              "chainId": ethers.utils.hexValue(chainId),
+              "chainName": networkName,
+              "nativeCurrency": {
+                "name": chain.currency,
+                "symbol": chain.currency,
+                "decimals": 18
+              },
+              "rpcUrls": [chain.rpc2],
+              "blockExplorerUrls": [chain.blockExplorer]
+            }
+          ]
+        });
+      }
     }
   }
 
@@ -286,6 +78,23 @@ export default function useChainHelpers() {
     getChainName,
     getFallbackProvider,
     getSupportedChains,
-    switchNetwork
+    switchOrAddChain
   }
 }
+
+const chains = [
+  { chainId: 10, name: "Optimism", currency: "ETH", rpc1: "https://optimism-mainnet.public.blastapi.io", rpc2: "https://rpc.ankr.com/optimism", blockExplorer: "https://optimistic.etherscan.io" },
+  { chainId: 14, name: "Flare", currency: "FLR", rpc1: "https://flare-api.flare.network/ext/C/rpc", rpc2: "https://flare-api.flare.network/ext/C/rpc", blockExplorer: "https://flare-explorer.flare.network" },
+  { chainId: 16, name: "Coston Testnet", currency: "CFLR", rpc1: "https://coston-api.flare.network/ext/C/rpc", rpc2: "https://coston-api.flare.network/ext/C/rpc", blockExplorer: "https://coston-explorer.flare.network" },
+  { chainId: 19, name: "Songbird", currency: "SGB", rpc1: "https://songbird-api.flare.network/ext/C/rpc", rpc2: "https://sgb.ftso.com.au/ext/bc/C/rpc", blockExplorer: "https://songbird-explorer.flare.network" },
+  { chainId: 56, name: "BNB Smart Chain", currency: "BNB", rpc1: "https://rpc.ankr.com/bsc", rpc2: "https://bsc-dataseed.binance.org", blockExplorer: "https://bscscan.com" },
+  { chainId: 100, name: "Gnosis Chain", currency: "XDAI", rpc1: "https://rpc.ankr.com/gnosis", rpc2: "https://rpc.ankr.com/gnosis", blockExplorer: "https://gnosisscan.io" },
+  { chainId: 137, name: "Polygon", currency: "MATIC", rpc1: "https://rpc.ankr.com/polygon", rpc2: "https://rpc.ankr.com/polygon", blockExplorer: "https://polygonscan.com" },
+  { chainId: 250, name: "Fantom", currency: "FTM", rpc1: "https://rpc.ankr.com/fantom", rpc2: "https://rpc.ankr.com/fantom", blockExplorer: "https://ftmscan.com" },
+  { chainId: 1101, name: "Polygon zkEVM", currency: "ETH", rpc1: "https://rpc.ankr.com/polygon_zkevm", rpc2: "https://1rpc.io/polygon/zkevm", blockExplorer: "https://zkevm.polygonscan.com" },
+  { chainId: 8453, name: "Base", currency: "ETH", rpc1: "https://mainnet.base.org", rpc2: "https://mainnet.base.org", blockExplorer: "https://basescan.org" },
+  { chainId: 34443, name: "Mode", currency: "ETH", rpc1: "https://mainnet.mode.network", rpc2: "https://1rpc.io/mode", blockExplorer: "https://explorer.mode.network"},
+  { chainId: 42161, name: "Arbitrum", currency: "ETH", rpc1: "https://rpc.ankr.com/arbitrum", rpc2: "https://rpc.ankr.com/arbitrum", blockExplorer: "https://arbiscan.io"},
+  { chainId: 81457, name: "Blast", currency: "ETH", rpc1: "https://rpc.blast.io", rpc2: "https://rpc.ankr.com/blast", blockExplorer: "https://blastscan.io"},
+  { chainId: 534352, name: "Scroll", currency: "ETH", rpc1: "https://rpc.scroll.io", rpc2: "https://1rpc.io/scroll", blockExplorer: "https://scrollscan.com"},
+];

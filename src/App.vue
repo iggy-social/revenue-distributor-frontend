@@ -16,6 +16,10 @@
 				<div class="modal-body row">
 
 					<div class="card col-6 set-cursor-pointer" @click="connectMetaMask">
+						<img src="./assets/img/wallets/rabby.png" class="card-img-top card-img-wallet" alt="Rabby">
+					</div> 
+
+					<div class="card col-6 set-cursor-pointer" @click="connectMetaMask">
 						<img src="./assets/img/wallets/metamask.png" class="card-img-top card-img-wallet" alt="MetaMask">
 					</div>
 
@@ -23,32 +27,12 @@
 						<img src="./assets/img/wallets/bifrost.png" class="card-img-top card-img-wallet" alt="Bifrost">
 					</div> 
 
-					<div class="card col-6 set-cursor-pointer" @click="connectWalletConnect">
-						<img src="./assets/img/wallets/wc.png" class="card-img-top card-img-wallet" alt="Wallet Connect">
-					</div>
-
 					<div class="card col-6 set-cursor-pointer" @click="connectCoinbase">
 						<img src="./assets/img/wallets/coinbase.png" class="card-img-top card-img-wallet" alt="Coinbase">
 					</div>
 
 					<div class="card col-6 set-cursor-pointer" @click="connectMetaMask">
-						<img src="./assets/img/wallets/rabby.png" class="card-img-top card-img-wallet" alt="Rabby">
-					</div> 
-
-					<div class="card col-6 set-cursor-pointer" @click="connectMetaMask">
 						<img src="./assets/img/wallets/brave.png" class="card-img-top card-img-wallet" alt="Brave">
-					</div>
-
-					<div class="card col-6 set-cursor-pointer" @click="connectWalletConnect">
-						<img src="./assets/img/wallets/minerva.png" class="card-img-top card-img-wallet" alt="Minerva">
-					</div>
-
-					<div class="card col-6 set-cursor-pointer" @click="connectWalletConnect">
-						<img src="./assets/img/wallets/argent.png" class="card-img-top card-img-wallet" alt="Argent">
-					</div>
-
-					<div class="card col-6 set-cursor-pointer" @click="connectWalletConnect">
-						<img src="./assets/img/wallets/1inch.png" class="card-img-top card-img-wallet" alt="1inch">
 					</div>
 
 					<div class="card col-6 set-cursor-pointer" @click="connectMetaMask">
@@ -67,8 +51,7 @@
 
 <script>
 import Navbar from './components/Navbar.vue';
-import { MetaMaskConnector, WalletConnectConnector, CoinbaseWalletConnector } from 'vue-dapp';
-import rpcs from './data/rpcs.json';
+import { MetaMaskConnector, CoinbaseWalletConnector } from 'vue-dapp';
 import { useEthers, useWallet } from 'vue-dapp';
 
 export default {
@@ -83,8 +66,6 @@ export default {
 		if (!this.isActivated) {
 			if (localStorage.getItem("connected") == "metamask") {
 				this.connectMetaMask();
-			} else if (localStorage.getItem("connected") == "walletconnect") {
-				this.connectWalletConnect();
 			} else if (localStorage.getItem("connected") == "coinbase") {
 				this.connectCoinbase();
 			}
@@ -102,12 +83,6 @@ export default {
 			await this.connectWith(this.mmConnector);
 			localStorage.setItem("connected", "metamask"); // store in local storage to autoconnect next time
 			document.getElementById('closeConnectModal').click();
-		},
-
-		async connectWalletConnect() {
-			await this.connectWith(this.wcConnector);
-			localStorage.setItem("connected", "walletconnect"); // store in local storage to autoconnect next time
-			document.getElementById('closeConnectModal').click();
 		}
 	},
 
@@ -116,17 +91,12 @@ export default {
 		const { connectWith } = useWallet();
 
 		const coinbaseConnector = new CoinbaseWalletConnector({
-			appName: 'Vue Dapp',
-			jsonRpcUrl: rpcs["1"],
+			appName: 'Revenue Distributor',
+			jsonRpcUrl: "https://rpc.ankr.com/optimism",
 		});
 
 		const mmConnector = new MetaMaskConnector({
-			appUrl: 'https://send2.name',
-		});
-
-		const wcConnector = new WalletConnectConnector({
-			qrcode: true,
-			rpc: rpcs,
+			appUrl: 'https://distributor.iggy.social',
 		});
 
 		return {
@@ -135,8 +105,7 @@ export default {
 			coinbaseConnector,
 			connectWith,
 			isActivated,
-			mmConnector,
-			wcConnector
+			mmConnector
 		}
   }
 }
