@@ -4,6 +4,11 @@ export default function useChainHelpers() {
 
   function getBlockExplorerBaseUrl(networkId) {
     let chain = chains.find(chain => chain.chainId == networkId);
+
+    if (!chain) {
+      return null;
+    }
+
     return chain.blockExplorer;
   }
 
@@ -96,5 +101,6 @@ const chains = [
   { chainId: 34443, name: "Mode", currency: "ETH", rpc1: "https://mainnet.mode.network", rpc2: "https://1rpc.io/mode", blockExplorer: "https://explorer.mode.network"},
   { chainId: 42161, name: "Arbitrum", currency: "ETH", rpc1: "https://rpc.ankr.com/arbitrum", rpc2: "https://rpc.ankr.com/arbitrum", blockExplorer: "https://arbiscan.io"},
   { chainId: 81457, name: "Blast", currency: "ETH", rpc1: "https://rpc.blast.io", rpc2: "https://rpc.ankr.com/blast", blockExplorer: "https://blastscan.io"},
+  { chainId: 98985, name: "Superposition Testnet", currency: "SPN", rpc1: "https://testnet-rpc.superposition.so/", rpc2: "https://testnet-rpc.superposition.so/", blockExplorer: "https://testnet-explorer.superposition.so"},
   { chainId: 534352, name: "Scroll", currency: "ETH", rpc1: "https://rpc.scroll.io", rpc2: "https://1rpc.io/scroll", blockExplorer: "https://scrollscan.com"},
 ];
