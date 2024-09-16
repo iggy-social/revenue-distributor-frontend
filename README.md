@@ -39,6 +39,7 @@ See [/src/data/factories.json](https://github.com/iggy-social/revenue-distributo
 - Blast Sniperz (Blast): [0xAf8f43705B2642E8f15393485F7308C2b37C503F](https://distributor.iggy.social/?addr=0xAf8f43705B2642E8f15393485F7308C2b37C503F&chain=81457)
 - FLR Chat (Flare): [0xFbaf1D1fBC5a2Fe2e48858a8A4585d5e7C12fc4A](https://distributor.iggy.social/?addr=0xFbaf1D1fBC5a2Fe2e48858a8A4585d5e7C12fc4A&chain=14) (aka distributor.flr).
 - Ionic ID (Mode): [0xaA2eF936d657Be591A0866f0C7b6249e6A2A1bb5](https://distributor.iggy.social/?addr=0xaA2eF936d657Be591A0866f0C7b6249e6A2A1bb5&chain=34443) (aka distributor.ion).
+- Meow Domains (Superposition): [0x98a37848dc2D0F07dE151Da3b3b92541563E1791](https://distributor.iggy.social/?addr=0x98a37848dc2D0F07dE151Da3b3b92541563E1791&chain=55244).
 - ModeChat (Mode): [0x20aeB41bCfaFb05b580dB2f687123eDa605315Ed](https://distributor.iggy.social/?addr=0x20aeB41bCfaFb05b580dB2f687123eDa605315Ed&chain=34443) (aka distributor.modechat).
 - Pool Chat (Optimism): [0x1eB2641eA0021567208C29f3200b7f1e68d92f85](https://distributor.iggy.social/?addr=0x1eB2641eA0021567208C29f3200b7f1e68d92f85&chain=10).
 - Scrolly Hub (Scroll): [0x0E66249733DDFe422F7A127B0b9E906601F23E06](https://distributor.iggy.social/?addr=0x0E66249733DDFe422F7A127B0b9E906601F23E06&chain=534352).

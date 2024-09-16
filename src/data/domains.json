@@ -94,6 +94,11 @@
     "address": "0x526Ff108F5d422d0e1d6650E2Bc015BBE1fdb058",
     "protocol": "PD"
   },
+  ".meow": {
+    "chainId": 55244,
+    "address": "0x4087fb91A1fBdef05761C02714335D232a2Bf3a1",
+    "protocol": "PD"
+  },
   ".modechat": {
     "chainId": 34443,
     "address": "0x523a7050df3DC7E96B7faAF4dDECCc244d886a90",
